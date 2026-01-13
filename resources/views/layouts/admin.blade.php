@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $title ?? 'Petshop Admin' }}</title>
 
-    <!-- Bootstrap 5 -->
+    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 
     <!-- Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
@@ -22,22 +22,18 @@
             min-height: 100vh;
         }
 
-        /* Overlay supaya konten tetap terbaca */
-        .bg-overlay {
-            background: rgba(0, 0, 0, 0.35);
-            backdrop-filter: blur(3px);
+        .overlay {
+            background: rgba(0,0,0,0.35);
             min-height: 100vh;
-            width: 100%;
         }
 
-        /* Sidebar ---------------------------------------------------- */
+        /* Sidebar */
         .sidebar {
-            width: 250px;
+            width: 260px;
             position: fixed;
             height: 100vh;
-            background: rgba(255, 255, 255, 0.85);
+            background: rgba(255,255,255,0.9);
             backdrop-filter: blur(8px);
-            border-right: 1px solid rgba(255, 255, 255, 0.3);
             padding: 25px 20px;
             border-radius: 0 20px 20px 0;
         }
@@ -47,37 +43,36 @@
             color: #6C63FF;
         }
 
-        .menu a {
+        .menu a,
+        .menu button {
             display: block;
+            width: 100%;
             padding: 12px 15px;
             margin-bottom: 10px;
             border-radius: 12px;
             font-weight: 500;
             color: #333;
-            background: rgba(255, 255, 255, 0.7);
+            background: rgba(255,255,255,0.7);
             text-decoration: none;
+            border: none;
+            text-align: left;
             transition: 0.25s;
         }
 
         .menu a:hover,
-        .menu .active {
+        .menu a.active {
             background: #6C63FF;
-            color: white !important;
+            color: white;
         }
 
-        /* Konten ---------------------------------------------------- */
+        .menu button:hover {
+            background: #FF5F7E;
+            color: white;
+        }
+
         .content {
-            margin-left: 270px;
+            margin-left: 280px;
             padding: 30px;
-        }
-
-        /* Card efek kaca */
-        .card, .modern-card, .chart-box {
-            background: rgba(255,255,255,0.85) !important;
-            backdrop-filter: blur(6px);
-            border-radius: 16px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-            border: none;
         }
     </style>
 
@@ -85,46 +80,58 @@
 </head>
 
 <body>
-<div class="bg-overlay">
+<div class="overlay">
 
     <!-- SIDEBAR -->
     <div class="sidebar">
         <h4><i class="bi bi-shop"></i> Petshop</h4>
 
         <div class="menu mt-4">
-            <a href="/" class="{{ request()->is('/') ? 'active' : '' }}">
+
+            <a href="{{ route('admin.dashboard') }}"
+               class="{{ request()->is('admin/dashboard') ? 'active' : '' }}">
                 <i class="bi bi-speedometer2"></i> Dashboard
             </a>
 
-            <a href="/barang" class="{{ request()->is('barang*') ? 'active' : '' }}">
+            <a href="{{ route('barang.index') }}"
+               class="{{ request()->is('admin/barang*') ? 'active' : '' }}">
                 <i class="bi bi-box-seam"></i> Barang
             </a>
 
-            <a href="/kategori" class="{{ request()->is('kategori*') ? 'active' : '' }}">
+            <a href="{{ route('kategori.index') }}"
+               class="{{ request()->is('admin/kategori*') ? 'active' : '' }}">
                 <i class="bi bi-tags"></i> Kategori
             </a>
 
-            <a href="/supplier" class="{{ request()->is('supplier*') ? 'active' : '' }}">
+            <a href="{{ route('supplier.index') }}"
+               class="{{ request()->is('admin/supplier*') ? 'active' : '' }}">
                 <i class="bi bi-truck"></i> Supplier
             </a>
 
-            <a href="/transaksi" class="{{ request()->is('transaksi*') ? 'active' : '' }}">
+            <a href="{{ route('transaksi.index') }}"
+               class="{{ request()->is('admin/transaksi*') ? 'active' : '' }}">
                 <i class="bi bi-clipboard-data"></i> Transaksi
             </a>
+
+            <!-- LOGOUT -->
+            <form action="{{ route('logout') }}" method="POST" class="mt-4">
+                @csrf
+                <button type="submit" onclick="return confirm('Yakin ingin logout?')">
+                    <i class="bi bi-box-arrow-right"></i> Logout
+                </button>
+            </form>
         </div>
     </div>
 
     <!-- CONTENT -->
     <div class="content">
-        <h3 class="text-white">{{ $title ?? '' }}</h3>
+        <h3 class="text-white mb-4">{{ $title ?? '' }}</h3>
         @yield('content')
     </div>
 
-</div> <!-- bg overlay -->
+</div>
 
-<!-- JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-
 @stack('js')
 </body>
 </html>
